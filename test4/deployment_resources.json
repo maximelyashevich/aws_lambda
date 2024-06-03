@@ -20,7 +20,7 @@
           "Resource": "*"
         }
       ],
-      "Version": "2012-10-17"
+      "Version": "2024-10-17"
     },
     "resource_type": "iam_policy"
   },
