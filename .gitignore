@@ -9,3 +9,6 @@ test4/logs/.syndicate-config-*/
 task01/.idea
 task01/.syndicate
 task01/logs/.syndicate-config-*/
+task02/.idea
+task02/.syndicate
+task02/logs/.syndicate-config-*/
