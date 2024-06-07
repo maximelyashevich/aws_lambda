@@ -12,3 +12,6 @@ task01/logs/.syndicate-config-*/
 task02/.idea
 task02/.syndicate
 task02/logs/.syndicate-config-*/
+task03/.idea
+task04/.syndicate
+task04/logs/.syndicate-config-*/
