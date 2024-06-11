@@ -44,48 +44,46 @@ public class AuditProducer implements RequestHandler<DynamodbEvent, String> {
         for (DynamodbStreamRecord streamRecord : event.getRecords()) {
             System.out.println(streamRecord.toString());
             var eventName = streamRecord.getEventName();
-            if (streamRecord.getEventSourceARN().contains("Configuration")) {
-                switch (eventName) {
-                    case "INSERT": {
-                        var newImage = streamRecord.getDynamodb().getNewImage();
+            switch (eventName) {
+                case "INSERT": {
+                    var newImage = streamRecord.getDynamodb().getNewImage();
 
-                        var attributesMap = new HashMap<String, AttributeValue>();
-                        attributesMap.put("id", new AttributeValue(UUID.randomUUID().toString()));
-                        attributesMap.put("itemKey", new AttributeValue(newImage.get(KEY).getS()));
-                        attributesMap.put("modificationTime", new AttributeValue(ZonedDateTime.now().format(formatter)));
+                    var attributesMap = new HashMap<String, AttributeValue>();
+                    attributesMap.put("id", new AttributeValue(UUID.randomUUID().toString()));
+                    attributesMap.put("itemKey", new AttributeValue(newImage.get(KEY).getS()));
+                    attributesMap.put("modificationTime", new AttributeValue(ZonedDateTime.now().format(formatter)));
 
-                        var newValue = new HashMap<String, AttributeValue>();
-                        newValue.put(KEY, new AttributeValue(newImage.get(KEY).getS()));
-                        newValue.put(VALUE, new AttributeValue(newImage.get(VALUE).getS()));
+                    var newValue = new HashMap<String, AttributeValue>();
+                    newValue.put(KEY, new AttributeValue(newImage.get(KEY).getS()));
+                    newValue.put(VALUE, new AttributeValue(newImage.get(VALUE).getN()));
 
-                        attributesMap.put("newValue", new AttributeValue().withM(newValue));
+                    attributesMap.put("newValue", new AttributeValue().withM(newValue));
 
-                        System.out.println(attributesMap);
+                    System.out.println(attributesMap);
 
-                        amazonDynamoDB.putItem(System.getenv("target_table"), attributesMap);
-                        break;
-                    }
-                    case "MODIFY": {
-                        var newImage = streamRecord.getDynamodb().getNewImage();
-                        var oldImage = streamRecord.getDynamodb().getOldImage();
+                    amazonDynamoDB.putItem(System.getenv("target_table"), attributesMap);
+                    break;
+                }
+                case "MODIFY": {
+                    var newImage = streamRecord.getDynamodb().getNewImage();
+                    var oldImage = streamRecord.getDynamodb().getOldImage();
 
-                        var attributesMap = new HashMap<String, AttributeValue>();
+                    var attributesMap = new HashMap<String, AttributeValue>();
 
-                        attributesMap.put("id", new AttributeValue(UUID.randomUUID().toString()));
-                        attributesMap.put("itemKey", new AttributeValue(newImage.get(KEY).getS()));
-                        attributesMap.put("modificationTime", new AttributeValue(ZonedDateTime.now().format(formatter)));
-                        attributesMap.put("updatedAttribute", new AttributeValue(VALUE));
-                        attributesMap.put("oldValue", new AttributeValue(oldImage.get(VALUE).getS()));
-                        attributesMap.put("newValue", new AttributeValue(newImage.get(VALUE).getS()));
+                    attributesMap.put("id", new AttributeValue(UUID.randomUUID().toString()));
+                    attributesMap.put("itemKey", new AttributeValue(newImage.get(KEY).getS()));
+                    attributesMap.put("modificationTime", new AttributeValue(ZonedDateTime.now().format(formatter)));
+                    attributesMap.put("updatedAttribute", new AttributeValue(VALUE));
+                    attributesMap.put("oldValue", new AttributeValue(oldImage.get(VALUE).getS()));
+                    attributesMap.put("newValue", new AttributeValue(newImage.get(VALUE).getN()));
 
-                        System.out.println(attributesMap);
+                    System.out.println(attributesMap);
 
-                        amazonDynamoDB.putItem(System.getenv("target_table"), attributesMap);
-                        break;
-                    }
-                    default: {
-                        System.out.println("Do nothing");
-                    }
+                    amazonDynamoDB.putItem(System.getenv("target_table"), attributesMap);
+                    break;
+                }
+                default: {
+                    System.out.println("Do nothing");
                 }
             }
         }
