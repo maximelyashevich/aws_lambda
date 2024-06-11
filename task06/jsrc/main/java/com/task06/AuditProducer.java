@@ -74,7 +74,7 @@ public class AuditProducer implements RequestHandler<DynamodbEvent, String> {
                     attributesMap.put("itemKey", new AttributeValue(newImage.get(KEY).getS()));
                     attributesMap.put("modificationTime", new AttributeValue(ZonedDateTime.now().format(formatter)));
                     attributesMap.put("updatedAttribute", new AttributeValue(VALUE));
-                    attributesMap.put("oldValue", new AttributeValue(oldImage.get(VALUE).getS()));
+                    attributesMap.put("oldValue", new AttributeValue(oldImage.get(VALUE).getN()));
                     attributesMap.put("newValue", new AttributeValue(newImage.get(VALUE).getN()));
 
                     System.out.println(attributesMap);
