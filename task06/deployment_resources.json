@@ -10,8 +10,11 @@
             "dynamodb:GetItem",
             "dynamodb:Query",
             "dynamodb:PutItem",
-            "dynamodb:Batch*",
             "dynamodb:DeleteItem",
+            "dynamodb:GetRecords",
+            "dynamodb:GetShardIterator",
+            "dynamodb:DescribeStream",
+            "dynamodb:ListStreams",
             "ssm:PutParameter",
             "ssm:GetParameter",
             "kms:Decrypt"
@@ -31,5 +34,23 @@
       "lambda-basic-execution"
     ],
     "resource_type": "iam_role"
+  },
+  "Configuration": {
+    "resource_type": "dynamodb_table",
+    "hash_key_name": "key",
+    "hash_key_type": "S",
+    "read_capacity": 1,
+    "write_capacity": 1,
+    "global_indexes": [],
+    "autoscaling": []
+  },
+  "${target_table}": {
+    "resource_type": "dynamodb_table",
+    "hash_key_name": "id",
+    "hash_key_type": "S",
+    "read_capacity": 1,
+    "write_capacity": 1,
+    "global_indexes": [],
+    "autoscaling": []
   }
 }
