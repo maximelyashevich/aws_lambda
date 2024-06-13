@@ -2,25 +2,43 @@ package com.task08;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
+import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
+import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
+import com.epam.meteo.OpenMeteoAPIClient;
 import com.syndicate.deployment.annotations.lambda.LambdaHandler;
-import com.syndicate.deployment.model.RetentionSetting;
+import com.syndicate.deployment.annotations.lambda.LambdaLayer;
+import com.syndicate.deployment.annotations.lambda.LambdaUrlConfig;
+import com.syndicate.deployment.model.ArtifactExtension;
+import com.syndicate.deployment.model.lambda.url.AuthType;
+import com.syndicate.deployment.model.lambda.url.InvokeMode;
 
-import java.util.HashMap;
-import java.util.Map;
 
 @LambdaHandler(lambdaName = "api_handler",
-	roleName = "api_handler-role",
-	isPublishVersion = true,
-	aliasName = "${lambdas_alias_name}",
-	logsExpiration = RetentionSetting.SYNDICATE_ALIASES_SPECIFIED
+        roleName = "api_handler-role",
+        layers = {"sdk-layer"}
 )
-public class ApiHandler implements RequestHandler<Object, Map<String, Object>> {
+@LambdaLayer(
+        layerName = "sdk-layer",
+        libraries = {"lib/open-meteo-1.0.jar"},
+        artifactExtension = ArtifactExtension.ZIP
+)
+@LambdaUrlConfig(
+        authType = AuthType.NONE,
+        invokeMode = InvokeMode.BUFFERED
+)
+public class ApiHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
-	public Map<String, Object> handleRequest(Object request, Context context) {
-		System.out.println("Hello from lambda");
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("statusCode", 200);
-		resultMap.put("body", "Hello from Lambda");
-		return resultMap;
-	}
+    @Override
+    public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent requestEvent, Context context) {
+        try {
+            var apiClient = new OpenMeteoAPIClient();
+            return new APIGatewayProxyResponseEvent()
+                    .withStatusCode(200)
+                    .withBody(apiClient.getWeatherForecast());
+        } catch (IllegalArgumentException exception) {
+            return new APIGatewayProxyResponseEvent()
+                    .withStatusCode(400)
+                    .withBody("ERROR");
+        }
+    }
 }
