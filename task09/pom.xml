@@ -31,6 +31,25 @@
             <artifactId>deployment-configuration-annotations</artifactId>
             <version>${syndicate.java.plugin.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-lambda-java-events</artifactId>
+            <version>3.11.6</version>
+        </dependency>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-dynamodb</artifactId>
+            <version>1.12.738</version>
+        </dependency>
+
+        <!--Custom dependencies (for sdk layer)-->
+        <dependency>
+            <groupId>com.epam.meteo</groupId>
+            <artifactId>open-meteo</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/open-meteo-1.0.jar</systemPath>
+        </dependency>
     </dependencies>
 
     <build>
@@ -39,7 +58,7 @@
             <resource>
                 <directory>${resources.dir}</directory>
             </resource>
-        </resources>        
+        </resources>
         <plugins>
             <plugin>
                 <groupId>net.sf.aws-syndicate</groupId>
