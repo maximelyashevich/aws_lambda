@@ -41,7 +41,7 @@ public class PostTablesHandler extends AbstractDBHandler {
 
             return new APIGatewayProxyResponseEvent()
                     .withStatusCode(HttpStatus.SC_OK)
-                    .withBody(String.format("{\"id\":\"%s\"}", id));
+                    .withBody(String.format("{\"id\":%s}", id));
         } catch (Exception e) {
             return new APIGatewayProxyResponseEvent()
                     .withStatusCode(HttpStatus.SC_BAD_REQUEST)
