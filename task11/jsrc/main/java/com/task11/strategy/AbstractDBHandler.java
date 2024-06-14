@@ -1,8 +1,8 @@
-package com.task10.strategy;
+package com.task11.strategy;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.task10.MethodHandler;
+import com.task11.MethodHandler;
 
 
 public abstract class AbstractDBHandler implements MethodHandler {

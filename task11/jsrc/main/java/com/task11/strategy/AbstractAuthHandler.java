@@ -1,7 +1,7 @@
-package com.task10.strategy;
+package com.task11.strategy;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.task10.MethodHandler;
+import com.task11.MethodHandler;
 import software.amazon.awssdk.services.cognitoidentityprovider.CognitoIdentityProviderClient;
 import software.amazon.awssdk.services.cognitoidentityprovider.model.AdminInitiateAuthRequest;
 import software.amazon.awssdk.services.cognitoidentityprovider.model.AdminInitiateAuthResponse;

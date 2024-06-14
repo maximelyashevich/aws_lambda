@@ -1,4 +1,4 @@
-package com.task10;
+package com.task11;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.lambda.runtime.Context;
@@ -8,13 +8,13 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.syndicate.deployment.annotations.environment.EnvironmentVariable;
 import com.syndicate.deployment.annotations.environment.EnvironmentVariables;
 import com.syndicate.deployment.annotations.lambda.LambdaHandler;
-import com.task10.strategy.GetReservationsHandler;
-import com.task10.strategy.GetTablesByIdHandler;
-import com.task10.strategy.GetTablesHandler;
-import com.task10.strategy.PostReservationsHandler;
-import com.task10.strategy.PostTablesHandler;
-import com.task10.strategy.SignInHandler;
-import com.task10.strategy.SignupHandler;
+import com.task11.strategy.GetReservationsHandler;
+import com.task11.strategy.GetTablesByIdHandler;
+import com.task11.strategy.GetTablesHandler;
+import com.task11.strategy.PostReservationsHandler;
+import com.task11.strategy.PostTablesHandler;
+import com.task11.strategy.SignInHandler;
+import com.task11.strategy.SignupHandler;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.cognitoidentityprovider.CognitoIdentityProviderClient;
 
