@@ -69,7 +69,19 @@ public class ApiHandler implements RequestHandler<APIGatewayProxyRequestEvent, A
             return buildErrorResponse(400, "Invalid resource.");
         }
 
-        return handler.handle(event);
+        var responseEvent = handler.handle(event);
+        responseEvent.withHeaders(getHeaders());
+
+        return responseEvent;
+    }
+
+    private static Map<String, String> getHeaders() {
+        return Map.of(
+                "Access-Control-Allow-Headers", "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+                "Access-Control-Allow-Origin", "*",
+                "Access-Control-Allow-Methods", "*",
+                "Accept-Version", "*"
+        );
     }
 
     private static APIGatewayProxyResponseEvent buildErrorResponse(int statusCode, String message) {
